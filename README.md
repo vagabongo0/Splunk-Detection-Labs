@@ -1,2 +1,45 @@
-# Splunk-Detection-Labs
-Detection use cases and dashboards created in Splunk to identify brute-force and PowerShell activity.
+# Splunk Detection Labs
+
+## 🧠 Objective  
+Create and test custom Splunk detection rules to identify suspicious activity in a simulated SOC environment.
+
+## 🛠 Tools  
+- Splunk Enterprise / Splunk Cloud  
+- Windows Event Logs (Security, Sysmon)  
+- MITRE ATT&CK Framework  
+
+## 🧩 Example Detections  
+- Failed logon correlation (Event ID 4625)  
+- Privilege escalation attempts  
+- Suspicious PowerShell activity  
+
+## ⚙️ SPL Queries  
+**Brute Force Detection**
+```spl
+index=main sourcetype="WinEventLog:Security" EventCode=4625
+| stats count as failed by Account_Name, src_ip, _time
+| bin _time span=5m
+| stats sum(failed) as failed by Account_Name, src_ip, _time
+| where failed >= 10
+```
+
+**Suspicious PowerShell Execution**
+```spl
+index=main (sourcetype="WinEventLog:Microsoft-Windows-PowerShell/Operational" OR EventCode=4104)
+| search Message="*EncodedCommand*" OR Message="*FromBase64String*"
+| table _time, user, host, Message
+```
+
+## 📊 Dashboard Examples  
+*(You can upload screenshots here later)*  
+![dashboard](images/splunk_dashboard_placeholder.png)
+
+## 🔖 MITRE ATT&CK Mapping  
+- T1110 – Brute Force  
+- T1059 – Command and Scripting Interpreter  
+
+## 📈 Results  
+Successfully created and tested detections in a simulated environment using lab-generated Windows Security and Sysmon logs.
+
+## 📚 Next Steps  
+Add dashboards, correlation searches, and more advanced detections as your skills progress.
