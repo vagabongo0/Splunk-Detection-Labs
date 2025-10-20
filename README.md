@@ -36,7 +36,7 @@ index=main (sourcetype="WinEventLog:Microsoft-Windows-PowerShell/Operational" OR
 ![Splunk Search](dashboards/splunk_search_4625.png)
 *Search results showing failed logon attempts (Event ID 4625).*
 
-![Brute Force Dashboard](dashboards/splunk_dashboard_bruteforce.png)
+![Brute Force Dashboard] https://github.com/vagabongo0/Splunk-Detection-Labs/tree/main
 *Dashboard view aggregating failed logons per IP address.*
 ## 🔖 MITRE ATT&CK Mapping  
 - T1110 – Brute Force  
