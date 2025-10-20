@@ -1,0 +1,5 @@
+index=main sourcetype="WinEventLog:Security" EventCode=4625
+| stats count as failed by Account_Name, src_ip, _time
+| bin _time span=5m
+| stats sum(failed) as failed by Account_Name, src_ip, _time
+| where failed >= 10
