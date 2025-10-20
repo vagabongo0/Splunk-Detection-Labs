@@ -1,54 +1,31 @@
-Splunk Detection Labs
+# Analysis Summary – Splunk Detection Labs
 
-🧠 Objective
+## Objective
+Summarise outcomes of Splunk detections (what we looked for, why it matters, what we found).
 
-Create and test custom Splunk detection rules to identify suspicious activity in a simulated SOC environment.
+## Dataset
+- Source: Windows Security logs (Event ID 4625), optionally Sysmon + PowerShell Operational (4104)
+- Ingestion: CSV upload into Splunk (index=main, sourcetype=WinEventLog:Security)
 
-🛠 Tools
-	•	Splunk Cloud Platform
-	•	Windows Event Logs (Security, Sysmon)
-	•	MITRE ATT&CK Framework
+## Detection(s)
+### 1) Brute-force logons (Event ID 4625)
+- SPL: see `queries/brute_force_detection.spl`
+- Threshold: ≥10 failed logons from same IP or against same user within 5 minutes
+- MITRE: T1110 – Brute Force
 
-🧩 Example Detections
-	•	Failed logon correlation (Event ID 4625)
-	•	Privilege escalation attempts
-	•	Suspicious PowerShell activity
+### 2) Suspicious PowerShell (optional, next)
+- SPL: to be added
+- MITRE: T1059 – Command and Scripting Interpreter
 
-⚙️ SPL Queries
+## Findings (example – replace with your results)
+- Peak failed-logon burst detected against user `testuser` from `192.0.2.15` at 11:05–11:10.
+- Multiple hosts showed repeated logon failures outside business hours.
 
-Brute Force Detection
+## Recommendations
+- Enforce account lockout policy; review MFA coverage.
+- Monitor after-hours logon attempts; block offending IPs if external.
+- Add correlation with successful logon (4624) following failures.
 
-index=main sourcetype=“WinEventLog:Security” EventCode=4625
-| stats count as failed by Account_Name, src_ip, _time
-| bin _time span=5m
-| stats sum(failed) as failed by Account_Name, src_ip, _time
-| where failed >= 10
-Suspicious PowerShell Execution
-
-index=main (sourcetype=“WinEventLog:Microsoft-Windows-PowerShell/Operational” OR EventCode=4104)
-| search Message=”EncodedCommand” OR Message=”FromBase64String”
-| table _time, user, host, Message
-
-📊 Splunk Dashboards & Visualizations
-
-Below are examples from a lab simulating failed logons (Event ID 4625).
-These are lab-generated artifacts to demonstrate SIEM search, detection and dashboarding skills.
-
-Artifacts:
-📁 Download sample_4625_events.csv
-🔍 Search Results
-Search results showing aggregated failed logon events (Event ID 4625). Columns show TimeCreated, Account, Source IP, and Message.
-
-📈 Brute Force Dashboard
-Dashboard visualising number of failed logons per source IP — used to prioritise investigation and create alert thresholds.
-🔖 MITRE ATT&CK Mapping
-	•	T1110 – Brute Force
-	•	T1059 – Command and Scripting Interpreter
-
-📈 Results
-
-Successfully created and tested detections in a simulated environment using lab-generated Windows Security and Sysmon logs.
-
-📚 Next Steps
-
-Add correlation searches, scheduled alerts, and more advanced detections as skills progress.
+## Evidence
+- Dashboard screenshots in `/dashboards`
+- Raw queries in `/queries`
