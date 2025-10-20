@@ -33,7 +33,7 @@ index=main (sourcetype="WinEventLog:Microsoft-Windows-PowerShell/Operational" OR
 ## 📊 Dashboard Examples  
 
 
-![Splunk Search](dashboards/splunk_search_4625.png)
+![Splunk Search] (splunk_search_4625.png)
 ![Brute-force Dashboard](dashboards/splunk_dashboard_bruteforce.png)
 
 ## 🔖 MITRE ATT&CK Mapping  
