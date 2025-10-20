@@ -1,31 +1,45 @@
-# Analysis Summary – Splunk Detection Labs
+# Splunk Detection Labs
 
-## Objective
-Summarise outcomes of Splunk detections (what we looked for, why it matters, what we found).
+## 🧠 Objective  
+Create and test custom Splunk detection rules to identify suspicious activity in a simulated SOC environment.
 
-## Dataset
-- Source: Windows Security logs (Event ID 4625), optionally Sysmon + PowerShell Operational (4104)
-- Ingestion: CSV upload into Splunk (index=main, sourcetype=WinEventLog:Security)
+## 🛠 Tools  
+- Splunk Enterprise / Splunk Cloud  
+- Windows Event Logs (Security, Sysmon)  
+- MITRE ATT&CK Framework  
 
-## Detection(s)
-### 1) Brute-force logons (Event ID 4625)
-- SPL: see `queries/brute_force_detection.spl`
-- Threshold: ≥10 failed logons from same IP or against same user within 5 minutes
-- MITRE: T1110 – Brute Force
+## 🧩 Example Detections  
+- Failed logon correlation (Event ID 4625)  
+- Privilege escalation attempts  
+- Suspicious PowerShell activity  
 
-### 2) Suspicious PowerShell (optional, next)
-- SPL: to be added
-- MITRE: T1059 – Command and Scripting Interpreter
+## ⚙️ SPL Queries  
+**Brute Force Detection**
+```spl
+index=main sourcetype="WinEventLog:Security" EventCode=4625
+| stats count as failed by Account_Name, src_ip, _time
+| bin _time span=5m
+| stats sum(failed) as failed by Account_Name, src_ip, _time
+| where failed >= 10
+```
 
-## Findings (example – replace with your results)
-- Peak failed-logon burst detected against user `testuser` from `192.0.2.15` at 11:05–11:10.
-- Multiple hosts showed repeated logon failures outside business hours.
+**Suspicious PowerShell Execution**
+```spl
+index=main (sourcetype="WinEventLog:Microsoft-Windows-PowerShell/Operational" OR EventCode=4104)
+| search Message="*EncodedCommand*" OR Message="*FromBase64String*"
+| table _time, user, host, Message
+```
 
-## Recommendations
-- Enforce account lockout policy; review MFA coverage.
-- Monitor after-hours logon attempts; block offending IPs if external.
-- Add correlation with successful logon (4624) following failures.
+## 📊 Dashboard Examples  
+*(You can upload screenshots here later)*  
+![dashboard](images/splunk_dashboard_placeholder.png)
 
-## Evidence
-- Dashboard screenshots in `/dashboards`
-- Raw queries in `/queries`
+## 🔖 MITRE ATT&CK Mapping  
+- T1110 – Brute Force  
+- T1059 – Command and Scripting Interpreter  
+
+## 📈 Results  
+Successfully created and tested detections in a simulated environment using lab-generated Windows Security and Sysmon logs.
+
+## 📚 Next Steps  
+Add dashboards, correlation searches, and more advanced detections as your skills progress.
