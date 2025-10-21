@@ -31,8 +31,9 @@ index=main (sourcetype="WinEventLog:Microsoft-Windows-PowerShell/Operational" OR
 ```
 
 ## 📊 Dashboard Examples  
-*(You can upload screenshots here later)*  
-![dashboard](images/splunk_dashboard_placeholder.png)
+![Splunk Search - Failed Logons](https://raw.githubusercontent.com/vagabongo0/Splunk-Detection-Labs/main/splunk_search_4625.png)
+
+![Brute Force Dashboard](https://raw.githubusercontent.com/vagabongo0/Splunk-Detection-Labs/main/splunk_dashboard_bruteforce.png)
 
 ## 🔖 MITRE ATT&CK Mapping  
 - T1110 – Brute Force  
